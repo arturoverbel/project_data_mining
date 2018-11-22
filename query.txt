@@ -1,0 +1,14 @@
+select o.id, o.application_user_id as user,
+o.payment_method, o.tip, o.created_at,
+op.store_id, p.name, op.total_price, p.type,
+s.lat as "store_lat", s.lng as "store_lng",
+o.created_at
+from orders o
+left join application_users ap on o.address_id = ap.id
+inner join order_product op on op.order_id = o.id
+inner join products p on p.id = op.product_id
+inner join stores s on op.store_id = s.store_id
+where ap.created_at > '2018-01-01 00:00:00' and ap.created_at < '2018-02-01 00:00:00'
+and p.type <> 'Rappi'
+order by o.application_user_id desc
+limit 20;
